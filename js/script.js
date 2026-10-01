@@ -13,55 +13,64 @@
       });
     });
 
-    
-/* =====================================
-   SETTINGS
-===================================== */
 
-const totalSections = 6;
+    let currentSection = 1;
 
-let currentSection = 1;
+const totalSections = 5;
 
 
-/* =====================================
+/* =========================================
    NAVIGATION
-===================================== */
-
-function showSection(sectionNumber) {
-
-    document.querySelectorAll(".section").forEach(section => {
-        section.classList.remove("active");
-    });
-
-    const section = document.getElementById("section" + sectionNumber);
-
-    if (section) {
-        section.classList.add("active");
-    }
-
-    currentSection = sectionNumber;
-
-    updateProgress();
-
-    window.scrollTo({
-        top: document.querySelector(".fundability-card").offsetTop - 30,
-        behavior: "smooth"
-    });
-}
-
+========================================= */
 
 function nextSection() {
 
-    if (!validateSection()) {
-        return;
+    const current = document.getElementById(
+        "section" + currentSection
+    );
+
+    const inputs = current.querySelectorAll(
+        'input[type="radio"]'
+    );
+
+    const questionNames = [
+        ...new Set(
+            Array.from(inputs).map(input => input.name)
+        )
+    ];
+
+    for (const name of questionNames) {
+
+        const answered = current.querySelector(
+            `input[name="${name}"]:checked`
+        );
+
+        if (!answered) {
+
+            alert("Please answer all questions before continuing.");
+
+            return;
+        }
     }
+
 
     if (currentSection < totalSections) {
 
-        showSection(currentSection + 1);
+        current.classList.remove("active");
 
+        currentSection++;
+
+        document.getElementById(
+            "section" + currentSection
+        ).classList.add("active");
+
+        updateProgress();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
     }
-
 }
 
 
@@ -69,877 +78,677 @@ function previousSection() {
 
     if (currentSection > 1) {
 
-        showSection(currentSection - 1);
+        document.getElementById(
+            "section" + currentSection
+        ).classList.remove("active");
 
+        currentSection--;
+
+        document.getElementById(
+            "section" + currentSection
+        ).classList.add("active");
+
+        updateProgress();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
     }
-
 }
 
 
-/* =====================================
-   VALIDATION
-===================================== */
-
-function validateSection() {
-
-    /* Validate lead details */
-
-    if (currentSection === 1) {
-
-        const fullName =
-            document.getElementById("fullName").value.trim();
-
-        const email =
-            document.getElementById("email").value.trim();
-
-        const phone =
-            document.getElementById("phone").value.trim();
-
-        const businessName =
-            document.getElementById("businessName").value.trim();
-
-
-        if (!fullName || !email || !phone || !businessName) {
-
-            alert("Please complete all fields before continuing.");
-
-            return false;
-
-        }
-
-
-       const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-
-            alert("Please enter a valid email address.");
-
-            return false;
-            
-
-        }
-
-
-        return true;
-
-    }
-
-
-    const section =
-        document.getElementById("section" + currentSection);
-
-    const questions =
-        section.querySelectorAll(".question");
-
-    let valid = true;
-
-
-    questions.forEach(question => {
-
-        const checked =
-            question.querySelector("input:checked");
-
-        if (!checked) {
-
-            valid = false;
-
-            question.style.borderLeft = "3px solid #ef4444";
-            question.style.paddingLeft = "12px";
-
-        } else {
-
-            question.style.borderLeft = "";
-            question.style.paddingLeft = "";
-
-        }
-
-    });
-
-
-    if (!valid) {
-
-        alert("Please answer all questions before continuing.");
-
-        return false;
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =====================================
+/* =========================================
    PROGRESS
-===================================== */
+========================================= */
 
 function updateProgress() {
 
     const percent =
-        (currentSection / totalSections) * 100;
-
-    document.getElementById("progressFill").style.width =
-        percent + "%";
-
-    document.getElementById("progressPercent").innerText =
-        Math.round(percent) + "%";
-
-    document.getElementById("progressText").innerText =
-        "Step " + currentSection + " of " + totalSections;
-
-}
-
-
-/* =====================================
-   GET ANSWER
-===================================== */
-
-function getValue(question) {
-
-    const selected =
-        document.querySelector(
-            'input[name="' + question + '"]:checked'
+        Math.round(
+            (currentSection / totalSections) * 100
         );
 
-    return selected
-        ? parseInt(selected.value)
-        : 0;
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        `Step ${currentSection} of ${totalSections}`;
 
+    document.getElementById(
+        "progressPercent"
+    ).textContent =
+        `${percent}%`;
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        `${percent}%`;
 }
 
 
-/* =====================================
-   CALCULATE SCORE
-===================================== */
+/* =========================================
+   SCORE CALCULATION
+========================================= */
 
 function calculateScore() {
 
-    if (!validateSection()) {
-        return;
+    const current =
+        document.getElementById(
+            "section" + currentSection
+        );
+
+    const inputs =
+        current.querySelectorAll(
+            'input[type="radio"]'
+        );
+
+    const questionNames = [
+        ...new Set(
+            Array.from(inputs).map(input => input.name)
+        )
+    ];
+
+    for (const name of questionNames) {
+
+        const answered = current.querySelector(
+            `input[name="${name}"]:checked`
+        );
+
+        if (!answered) {
+
+            alert(
+                "Please answer all questions before viewing your score."
+            );
+
+            return;
+        }
     }
 
 
-    const financial =
-        getValue("q1") +
-        getValue("q2") +
-        getValue("q3");
+    /* Financial Health: Q1-Q3 */
+
+    const financialScore =
+        getScore("q1") +
+        getScore("q2") +
+        getScore("q3");
 
 
-    const risk =
-        getValue("q4") +
-        getValue("q5") +
-        getValue("q6");
+    /* Risk & Credibility: Q4-Q6 */
+
+    const riskScore =
+        getScore("q4") +
+        getScore("q5") +
+        getScore("q6");
 
 
-    const credit =
-        getValue("q7") +
-        getValue("q8");
+    /* Credit History: Q7-Q8 */
+
+    const creditScore =
+        getScore("q7") +
+        getScore("q8");
 
 
-    const management =
-        getValue("q9") +
-        getValue("q10");
+    /* Management: Q9-Q10 */
+
+    const managementScore =
+        getScore("q9") +
+        getScore("q10");
 
 
-    const businessPlan =
-        getValue("q11") +
-        getValue("q12") +
-        getValue("q13");
+    /* Business Plan: Q11-Q13 */
+
+    const businessPlanScore =
+        getScore("q11") +
+        getScore("q12") +
+        getScore("q13");
 
 
-    const total =
-        financial +
-        risk +
-        credit +
-        management +
-        businessPlan;
+    /* Total */
+
+    const totalScore =
+        financialScore +
+        riskScore +
+        creditScore +
+        managementScore +
+        businessPlanScore;
 
 
-    generateResults(
-        total,
-        financial,
-        risk,
-        credit,
-        management,
-        businessPlan
+    /* Display scores */
+
+    document.getElementById(
+        "totalScore"
+    ).textContent = totalScore;
+
+
+    document.getElementById(
+        "financialScore"
+    ).textContent = financialScore;
+
+
+    document.getElementById(
+        "riskScore"
+    ).textContent = riskScore;
+
+
+    document.getElementById(
+        "creditScore"
+    ).textContent = creditScore;
+
+
+    document.getElementById(
+        "managementScore"
+    ).textContent = managementScore;
+
+
+    document.getElementById(
+        "businessPlanScore"
+    ).textContent = businessPlanScore;
+
+
+    /* Progress bars */
+
+    setBar(
+        "financialBar",
+        financialScore,
+        25
+    );
+
+    setBar(
+        "riskBar",
+        riskScore,
+        25
+    );
+
+    setBar(
+        "creditBar",
+        creditScore,
+        15
+    );
+
+    setBar(
+        "managementBar",
+        managementScore,
+        15
+    );
+
+    setBar(
+        "businessPlanBar",
+        businessPlanScore,
+        20
     );
 
 
-    /*
-       IMPORTANT:
-       Submit the lead and score to FormSubmit.
-    */
+    /* Pillar feedback */
 
-    submitToFormSubmit(
-        total,
-        financial,
-        risk,
-        credit,
-        management,
-        businessPlan
-    );
+    document.getElementById(
+        "financialFeedback"
+    ).textContent =
+        getPillarFeedback(financialScore, 25);
+
+
+    document.getElementById(
+        "riskFeedback"
+    ).textContent =
+        getPillarFeedback(riskScore, 25);
+
+
+    document.getElementById(
+        "creditFeedback"
+    ).textContent =
+        getPillarFeedback(creditScore, 15);
+
+
+    document.getElementById(
+        "managementFeedback"
+    ).textContent =
+        getPillarFeedback(managementScore, 15);
+
+
+    document.getElementById(
+        "businessPlanFeedback"
+    ).textContent =
+        getPillarFeedback(businessPlanScore, 20);
+
+
+    /* Overall status */
+
+    setOverallStatus(totalScore);
+
+
+    /* Recommendations */
+
+    generateRecommendations({
+        financial: financialScore,
+        risk: riskScore,
+        credit: creditScore,
+        management: managementScore,
+        businessPlan: businessPlanScore
+    });
+
+
+    /* Hide assessment */
+
+    for (
+        let i = 1;
+        i <= totalSections;
+        i++
+    ) {
+
+        document.getElementById(
+            "section" + i
+        ).classList.remove("active");
+    }
+
+
+    document.getElementById(
+        "progressContainer"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "results"
+    ).style.display = "block";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================
+   GET RADIO SCORE
+========================================= */
+
+function getScore(questionName) {
+
+    const selected =
+        document.querySelector(
+            `input[name="${questionName}"]:checked`
+        );
+
+    return selected
+        ? Number(selected.value)
+        : 0;
+}
+
+
+/* =========================================
+   PROGRESS BAR
+========================================= */
+
+function setBar(id, score, maximum) {
+
+    const percentage =
+        (score / maximum) * 100;
+
+    document.getElementById(
+        id
+    ).style.width =
+        `${percentage}%`;
+}
+
+
+/* =========================================
+   PILLAR FEEDBACK
+========================================= */
+
+function getPillarFeedback(score, maximum) {
+
+    const percentage =
+        (score / maximum) * 100;
+
+
+    if (percentage < 40) {
+
+        return "This is an area that should be prioritised before seeking funding.";
+
+    }
+
+
+    if (percentage < 70) {
+
+        return "There is a reasonable foundation, but strengthening this area could improve your funding readiness.";
+
+    }
+
+
+    return "This is currently one of the stronger areas of your funding profile.";
 
 }
 
 
-/* =====================================
-   GENERATE RESULTS
-===================================== */
+/* =========================================
+   OVERALL STATUS
+========================================= */
 
-function generateResults(
-    total,
-    financial,
-    risk,
-    credit,
-    management,
-    businessPlan
-) {
+function setOverallStatus(score) {
 
-    document.querySelectorAll(".section").forEach(section => {
-        section.style.display = "none";
+    const status =
+        document.getElementById(
+            "scoreStatus"
+        );
+
+    const description =
+        document.getElementById(
+            "scoreDescription"
+        );
+
+
+    if (score < 40) {
+
+        status.textContent =
+            "Needs Improvement";
+
+        description.textContent =
+            "Your assessment highlights several areas that should be strengthened before approaching funders.";
+
+    }
+
+    else if (score < 60) {
+
+        status.textContent =
+            "Developing";
+
+        description.textContent =
+            "Your business has some funding foundations in place, but there are important areas that could be improved.";
+
+    }
+
+    else if (score < 80) {
+
+        status.textContent =
+            "Funding Ready";
+
+        description.textContent =
+            "Your business demonstrates a solid level of funding readiness, although there may still be areas worth strengthening.";
+
+    }
+
+    else {
+
+        status.textContent =
+            "Strong Funding Profile";
+
+        description.textContent =
+            "Your assessment indicates strong foundations across the key areas measured.";
+
+    }
+
+}
+
+
+/* =========================================
+   RECOMMENDATIONS
+========================================= */
+
+function generateRecommendations(scores) {
+
+    const recommendation =
+        document.getElementById(
+            "recommendation"
+        );
+
+
+    const areas = [
+
+        {
+            name: "Financial Health",
+            score: scores.financial,
+            maximum: 25,
+            recommendations: [
+                "Improve the consistency and visibility of your revenue.",
+                "Work towards stronger and more consistent profit margins.",
+                "Keep complete, up-to-date financial statements and management accounts."
+            ]
+        },
+
+        {
+            name: "Risk & Credibility",
+            score: scores.risk,
+            maximum: 25,
+            recommendations: [
+                "Ensure your business registration and compliance requirements are up to date.",
+                "Maintain a dedicated business bank account.",
+                "Create and organise a complete funding documentation pack."
+            ]
+        },
+
+        {
+            name: "Credit History",
+            score: scores.credit,
+            maximum: 15,
+            recommendations: [
+                "Build a stronger business credit profile through responsible use of credit.",
+                "Prioritise the settlement of overdue accounts and outstanding obligations.",
+                "Maintain a clean repayment history going forward."
+            ]
+        },
+
+        {
+            name: "Management & Leadership",
+            score: scores.management,
+            maximum: 15,
+            recommendations: [
+                "Document important operational processes.",
+                "Strengthen management systems and internal controls.",
+                "Clearly document the experience and responsibilities of the management team."
+            ]
+        },
+
+        {
+            name: "Business Plan & Growth",
+            score: scores.businessPlan,
+            maximum: 20,
+            recommendations: [
+                "Develop a detailed business plan.",
+                "Prepare realistic 12–36 month financial projections.",
+                "Clearly explain how funding will be deployed and what measurable outcomes it should achieve."
+            ]
+        }
+
+    ];
+
+
+    /*
+       Sort areas from weakest to strongest.
+       This ensures the most important
+       improvement areas appear first.
+    */
+
+    areas.sort(
+        (a, b) =>
+            (a.score / a.maximum) -
+            (b.score / b.maximum)
+    );
+
+
+    let html =
+        "<p><strong>Your priority areas:</strong></p>";
+
+    html += "<ul>";
+
+
+    /*
+       Show the three weakest areas.
+    */
+
+    areas.slice(0, 3).forEach(area => {
+
+        const percentage =
+            Math.round(
+                (area.score / area.maximum) * 100
+            );
+
+
+        html += `
+            <li>
+                <strong>${area.name}</strong>
+                (${percentage}%)
+                <ul>
+        `;
+
+
+        area.recommendations
+            .slice(0, 2)
+            .forEach(item => {
+
+                html += `
+                    <li>${item}</li>
+                `;
+
+            });
+
+
+        html += `
+                </ul>
+            </li>
+        `;
+
     });
 
-    document.getElementById("progressContainer").style.display =
-        "none";
 
-    document.getElementById("intro").style.display =
-        "none";
-
-    document.getElementById("results").style.display =
-        "block";
+    html += "</ul>";
 
 
-    document.getElementById("totalScore").innerText =
-        total;
+    /*
+       General recommendation based
+       on the overall score.
+    */
+
+    const total =
+        areas.reduce(
+            (sum, area) => sum + area.score,
+            0
+        );
 
 
-    document.getElementById("financialScore").innerText =
-        financial;
-
-    document.getElementById("riskScore").innerText =
-        risk;
-
-    document.getElementById("creditScore").innerText =
-        credit;
-
-    document.getElementById("managementScore").innerText =
-        management;
-
-    document.getElementById("businessPlanScore").innerText =
-        businessPlan;
+    html += "<p>";
 
 
-    document.getElementById("financialBar").style.width =
-        (financial / 25 * 100) + "%";
+    if (total < 40) {
 
-    document.getElementById("riskBar").style.width =
-        (risk / 25 * 100) + "%";
+        html +=
+            "<strong>Recommended focus:</strong> Strengthen the fundamentals of your business before actively pursuing external funding.";
 
-    document.getElementById("creditBar").style.width =
-        (credit / 15 * 100) + "%";
+    }
 
-    document.getElementById("managementBar").style.width =
-        (management / 15 * 100) + "%";
+    else if (total < 60) {
 
-    document.getElementById("businessPlanBar").style.width =
-        (businessPlan / 20 * 100) + "%";
+        html +=
+            "<strong>Recommended focus:</strong> Address your weakest areas first, particularly financial records, credit, compliance and funding documentation.";
+
+    }
+
+    else if (total < 80) {
+
+        html +=
+            "<strong>Recommended focus:</strong> Your foundation is developing well. Focus on strengthening the lowest-scoring pillars and preparing a lender/investor-ready funding package.";
+
+    }
+
+    else {
+
+        html +=
+            "<strong>Recommended focus:</strong> Maintain your current foundations and ensure your financial information, projections and funding proposal are fully prepared before approaching funders.";
+
+    }
 
 
-    generateRecommendation(total);
+    html += "</p>";
 
-    generateRisks(
-        financial,
-        risk,
-        credit,
-        management,
-        businessPlan
-    );
 
-    generateFundingTypes(
-        total,
-        financial,
-        risk,
-        credit,
-        management,
-        businessPlan
-    );
+    recommendation.innerHTML =
+        html;
 
-    generateActionPlan(
-        financial,
-        risk,
-        credit,
-        management,
-        businessPlan
-    );
+}
+
+
+/* =========================================
+   RETAKE ASSESSMENT
+========================================= */
+
+function restartAssessment() {
+
+    /*
+       Reset all answers.
+    */
+
+    document
+        .querySelectorAll(
+            'input[type="radio"]'
+        )
+        .forEach(input => {
+
+            input.checked = false;
+
+        });
+
+
+    /*
+       Reset section.
+    */
+
+    document
+        .querySelectorAll(".section")
+        .forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+
+    currentSection = 1;
+
+
+    document
+        .getElementById("section1")
+        .classList.add("active");
+
+
+    /*
+       Reset progress.
+    */
+
+    document
+        .getElementById("progressContainer")
+        .style.display = "block";
+
+
+    updateProgress();
+
+
+    /*
+       Hide results.
+    */
+
+    document
+        .getElementById("results")
+        .style.display = "none";
 
 
     window.scrollTo({
-        top: document.querySelector(".fundability-card").offsetTop - 20,
+        top: 0,
         behavior: "smooth"
     });
 
 }
 
 
-/* =====================================
-   RECOMMENDATION
-===================================== */
-
-function generateRecommendation(score) {
-
-    const status =
-        document.getElementById("scoreStatus");
-
-    const description =
-        document.getElementById("scoreDescription");
-
-    const recommendation =
-        document.getElementById("recommendation");
-
-
-    status.className = "score-status";
-
-
-    if (score <= 39) {
-
-        status.innerText =
-            "Not Fundable";
-
-        status.classList.add("red");
-
-        description.innerText =
-            "Your business currently has significant funding readiness gaps.";
-
-        recommendation.innerHTML =
-            "<strong>Recommendation:</strong> Focus on strengthening the fundamentals of your business before submitting funding applications. Prioritise financial records, compliance, creditworthiness and a clear funding strategy.";
-
-    }
-
-    else if (score <= 59) {
-
-        status.innerText =
-            "Emerging Fundability";
-
-        status.classList.add("orange");
-
-        description.innerText =
-            "Your business shows potential but has important areas that should be improved.";
-
-        recommendation.innerHTML =
-            "<strong>Recommendation:</strong> Your business may qualify for certain funding opportunities, but improving your weaker areas could significantly strengthen your application and expand your funding options.";
-
-    }
-
-    else if (score <= 79) {
-
-        status.innerText =
-            "Funding Ready";
-
-        status.classList.add("yellow");
-
-        description.innerText =
-            "Your business meets many of the characteristics funders look for.";
-
-        recommendation.innerHTML =
-            "<strong>Recommendation:</strong> You are approaching a strong funding position. Focus on closing the remaining gaps, preparing a professional funding pack and targeting funding opportunities that match your business.";
-
-    }
-
-    else {
-
-        status.innerText =
-            "Highly Fundable";
-
-        status.classList.add("green");
-
-        description.innerText =
-            "Your business demonstrates strong funding readiness.";
-
-        recommendation.innerHTML =
-            "<strong>Recommendation:</strong> Your business appears well positioned to approach suitable lenders, investors and grant providers. Your priority should now be matching your business with the right funding source and presenting a compelling funding case.";
-
-    }
-
-}
-
-
-/* =====================================
-   RISKS
-===================================== */
-
-function generateRisks(
-    financial,
-    risk,
-    credit,
-    management,
-    businessPlan
-) {
-
-    const list =
-        document.getElementById("riskList");
-
-    list.innerHTML = "";
-
-
-    const risks = [];
-
-
-    if (financial < 15) {
-
-        risks.push(
-            "Financial health is below the recommended level. Your revenue, profitability or financial reporting may need strengthening."
-        );
-
-    }
-
-
-    if (risk < 15) {
-
-        risks.push(
-            "Business credibility and documentation may not yet meet the expectations of many funders."
-        );
-
-    }
-
-
-    if (credit < 9) {
-
-        risks.push(
-            "Your business credit profile or repayment history may limit some funding options."
-        );
-
-    }
-
-
-    if (management < 9) {
-
-        risks.push(
-            "Management experience, systems or operational processes could be strengthened."
-        );
-
-    }
-
-
-    if (businessPlan < 12) {
-
-        risks.push(
-            "Your business plan, projections or funding strategy may require further development."
-        );
-
-    }
-
-
-    if (risks.length === 0) {
-
-        risks.push(
-            "No major weaknesses were identified by this scorecard. Continue maintaining strong financial, operational and funding documentation."
-        );
-
-    }
-
-
-    risks.forEach(riskItem => {
-
-        const li =
-            document.createElement("li");
-
-        li.innerText =
-            riskItem;
-
-        list.appendChild(li);
-
-    });
-
-}
-
-
-/* =====================================
-   FUNDING TYPES
-===================================== */
-
-function generateFundingTypes(
-    total,
-    financial,
-    risk,
-    credit,
-    management,
-    businessPlan
-) {
-
-    const container =
-        document.getElementById("fundingTypes");
-
-    container.innerHTML = "";
-
-
-    const types = [];
-
-
-    if (total >= 60 && financial >= 15 && credit >= 7) {
-
-        types.push("Business Loans");
-
-    }
-
-
-    if (businessPlan >= 12 && management >= 8) {
-
-        types.push("Equity / Investment");
-
-    }
-
-
-    if (risk >= 15 && businessPlan >= 10) {
-
-        types.push("Grants");
-
-    }
-
-
-    if (total >= 40) {
-
-        types.push("Alternative Funding");
-
-    }
-
-
-    if (types.length === 0) {
-
-        types.push("Funding Readiness Preparation");
-
-    }
-
-
-    types.forEach(type => {
-
-        const tag =
-            document.createElement("div");
-
-        tag.className =
-            "funding-tag";
-
-        tag.innerText =
-            type;
-
-        container.appendChild(tag);
-
-    });
-
-}
-
-
-/* =====================================
-   ACTION PLAN
-===================================== */
-
-function generateActionPlan(
-    financial,
-    risk,
-    credit,
-    management,
-    businessPlan
-) {
-
-    const list =
-        document.getElementById("actionList");
-
-    list.innerHTML = "";
-
-
-    const actions = [];
-
-
-    if (financial < 20) {
-
-        actions.push(
-            "Strengthen your financial records, bookkeeping, profitability tracking and cash-flow management."
-        );
-
-    }
-
-
-    if (risk < 20) {
-
-        actions.push(
-            "Ensure your business registration, compliance documents, bank account and supporting business documents are up to date."
-        );
-
-    }
-
-
-    if (credit < 12) {
-
-        actions.push(
-            "Review your business credit profile and establish a consistent repayment history."
-        );
-
-    }
-
-
-    if (management < 12) {
-
-        actions.push(
-            "Document key operational processes and strengthen management systems and controls."
-        );
-
-    }
-
-
-    if (businessPlan < 16) {
-
-        actions.push(
-            "Develop a lender/investor-ready business plan with realistic 12–36 month financial projections."
-        );
-
-        actions.push(
-            "Create a clear funding allocation plan showing exactly how capital will be used and how it will generate business growth."
-        );
-
-    }
-
-
-    if (actions.length === 0) {
-
-        actions.push(
-            "Maintain your current financial and operational standards while identifying funding opportunities aligned with your growth strategy."
-        );
-
-        actions.push(
-            "Prepare a professional funding application pack and begin targeting suitable funding providers."
-        );
-
-    }
-
-
-    actions.forEach(action => {
-
-        const li =
-            document.createElement("li");
-
-        li.innerText =
-            action;
-
-        list.appendChild(li);
-
-    });
-
-}
-
-
-/* =====================================
-   FORMSUBMIT
-===================================== */
-
-
-function submitToFormSubmit(
-    total,
-    financial,
-    risk,
-    credit,
-    management,
-    businessPlan
-) {
-
-    const form = document.createElement("form");
-
-    form.method = "POST";
-
-    form.action = "https://formsubmit.co/fundingengine.sa@gmail.com";
-
-    form.style.display = "none";
-
-
-    /* =====================================
-       EMAIL CONFIGURATION
-    ===================================== */
-
-    addHiddenInput(
-        form,
-        "_subject",
-        "New Funding Engine™ Fundability Assessment"
-    );
-
-    addHiddenInput(
-        form,
-        "_captcha",
-        "false"
-    );
-
-    addHiddenInput(
-        form,
-        "_template",
-        "table"
-    );
-
-
-    /* =====================================
-       LEAD INFORMATION
-    ===================================== */
-
-    addHiddenInput(
-        form,
-        "Full Name",
-        document.getElementById("fullName").value
-    );
-
-    addHiddenInput(
-        form,
-        "Email Address",
-        document.getElementById("email").value
-    );
-
-    addHiddenInput(
-        form,
-        "Phone Number",
-        document.getElementById("phone").value
-    );
-
-    addHiddenInput(
-        form,
-        "Business Name",
-        document.getElementById("businessName").value
-    );
-
-
-    /* =====================================
-       OVERALL SCORE
-    ===================================== */
-
-    addHiddenInput(
-        form,
-        "OVERALL FUNDABILITY SCORE",
-        total + " / 100"
-    );
-
-
-    /* =====================================
-       PILLAR SCORES
-    ===================================== */
-
-    addHiddenInput(
-        form,
-        "Financial Health Score",
-        financial + " / 25"
-    );
-
-    addHiddenInput(
-        form,
-        "Risk & Credibility Score",
-        risk + " / 25"
-    );
-
-    addHiddenInput(
-        form,
-        "Credit History Score",
-        credit + " / 15"
-    );
-
-    addHiddenInput(
-        form,
-        "Management & Leadership Score",
-        management + " / 15"
-    );
-
-    addHiddenInput(
-        form,
-        "Business Plan & Growth Score",
-        businessPlan + " / 20"
-    );
-
-
-    /* =====================================
-       INDIVIDUAL ANSWERS
-    ===================================== */
-
-    for (let i = 1; i <= 13; i++) {
-
-        const answer = document.querySelector(
-            'input[name="q' + i + '"]:checked'
-        );
-
-        if (answer) {
-
-            addHiddenInput(
-                form,
-                "Question " + i + " Score",
-                answer.value
-            );
-
-        }
-    }
-
-
-    /* =====================================
-       SUBMIT
-    ===================================== */
-
-    document.body.appendChild(form);
-
-    form.submit();
-}
-
-
-/* =====================================
-   CREATE HIDDEN INPUT
-===================================== */
-
-function addHiddenInput(form, name, value) {
-
-    const input = document.createElement("input");
-
-    input.type = "hidden";
-
-    input.name = name;
-
-    input.value = value;
-
-    form.appendChild(input);
-}
-
-
-/* =====================================
-   RESTART
-===================================== */
-
-function restartAssessment() {
-
-    document.querySelectorAll(
-        "input[type='radio']"
-    ).forEach(input => {
-
-        input.checked = false;
-
-    });
-
-
-    document.getElementById("results").style.display =
-        "none";
-
-    document.getElementById("progressContainer").style.display =
-        "block";
-
-    document.getElementById("intro").style.display =
-        "block";
-
-
-    document.querySelectorAll(".section").forEach(section => {
-
-        section.style.display = "";
-
-    });
-
-
-    currentSection = 1;
-
-    showSection(1);
-
-}
-
-
-/* =====================================
+/* =========================================
    INITIALISE
-===================================== */
+========================================= */
 
-updateProgress();
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        updateProgress();
+
+        document
+            .getElementById("results")
+            .style.display = "none";
+
+    }
+);
