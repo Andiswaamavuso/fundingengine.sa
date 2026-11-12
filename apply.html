@@ -1,825 +1,807 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Funding Engine | Funding Readiness</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funding Application | Funding Engine</title>
+<link rel="icon" type="image/png" href="./img/Funding_Engine_Favicon-removebg-preview.png">
 
+<style>
+:root {
+    --primary: #ab875f;
+    --secondary: #ab875f;
+    --accent: #D6A84B;
+    --background: #fdfaf0;
+    --text: #25332F;
+    --muted: #718078;
+    --border: #DCE5E0;
+}
 
-  <link rel="icon" type="image/png" href="./img/Funding_Engine_Favicon-removebg-preview.png">
+* {
+    box-sizing: border-box;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #ffffff;
-      color: #ab875f;
-      line-height: 1.6;
-    }
+.header {
+    background: #ffffff;
+    padding: 32px 20px;
+    text-align: center;
+    color: white;
+}
 
-    .form-wrapper {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-    }
+.logo {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
 
-    .form-container {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    }
+.logo img {
+    height: 80px;
+}
 
-    .form-header {
-      text-align: center;
-      margin-bottom: 35px;
-    }
+.header p {
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: #D8E6DF;
+}
 
-    .form-header h1 {
-      font-size: 32px;
-      color: #ab875f;
-      margin-bottom: 10px;
-    }
+.container {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 0 18px;
+}
 
-    .form-header p {
-      color: #667085;
-      max-width: 650px;
-      margin: auto;
-    }
+.intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-    .section {
-      margin-bottom: 35px;
-    }
+.intro h1 {
+    color: var(--primary);
+    font-size: 25px;
+    font-weight: bolder;
+    margin-bottom: 8px;
+}
 
-    .section-title {
-      font-size: 20px;
-      color: #ab875f;
-      border-bottom: 2px solid #ab875f;
-      padding-bottom: 10px;
-      margin-bottom: 22px;
-    }
+.intro p {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 20px;
+}
 
-    .section-number {
-      color: #ab875f;
-      margin-right: 8px;
-    }
+.progress-wrapper {
+    margin: 25px 0 35px;
+}
 
-    .form-group {
-      margin-bottom: 20px;
-    }
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
 
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 7px;
-      color: #344054;
-    }
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #fdfaf0;
+    border: 1px solid #ab875f;
+    border-radius: 20px;
+    overflow: hidden;
+}
 
-    .required {
-      color: #d92d20;
-    }
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #ab875f;
+    transition: width 0.3s ease;
+}
 
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #d0d5dd;
-      border-radius: 8px;
-      font-size: 15px;
-      font-family: inherit;
-      background: #fff;
-      transition: 0.2s ease;
-    }
+.form-section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.025);
+}
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #ab875f;
-      box-shadow: 0 0 0 3px rgba(0, 151, 178, 0.12);
-    }
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 25px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
+.section-number {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
+.section-heading h2 {
+    font-size: 19px;
+    color: var(--primary);
+    margin: 0;
+}
 
-    .checkbox-group,
-    .radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+.section-heading p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 3px 0 0;
+}
 
-    .checkbox-option,
-    .radio-option {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-weight: normal;
-      cursor: pointer;
-    }
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
 
-    .checkbox-option input,
-    .radio-option input {
-      width: auto;
-      margin-top: 5px;
-      accent-color: #ab875f;
-    }
+.form-group {
+    margin-bottom: 20px;
+}
 
-    .help-text {
-      font-size: 13px;
-      color: #ab885f9d;
-      margin-top: 5px;
-    }
+.form-group.full {
+    grid-column: 1 / -1;
+}
 
-    .declaration {
-      background: #fdfaf6;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 15px;
-    }
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+}
 
-    .submit-btn {
-      width: 100%;
-      background: #ab875f;
-      color: white;
-      border: 2px solid #ab875f;
-      padding: 16px 25px;
-      border-radius: 8px;
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s ease;
-      margin-top: 10px;
-    }
+.required {
+    color: #D34A4A;
+}
 
-    .submit-btn:hover {
-      background: #ffffff;
-      color: #ab875f;
-      transform: translateY(-1px);
-    }
+input, select, textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: 0.2s;
+}
 
-    .privacy-note {
-      text-align: center;
-      font-size: 12px;
-      color: #ab885fa2;
-      margin-top: 15px;
-    }
+input:focus, select:focus, textarea:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(28,107,86,0.08);
+}
 
-    /* Honeypot */
-    .hidden-field {
-      display: none !important;
-    }
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
 
-    @media (max-width: 700px) {
-      .form-wrapper {
-        margin: 15px auto;
-        padding: 10px;
-      }
+select {
+    cursor: pointer;
+}
 
-      .form-container {
-        padding: 25px 18px;
-        border-radius: 12px;
-      }
+.declaration-intro {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
 
-      .form-header h1 {
-        font-size: 26px;
-      }
+.consent-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid #EDF1EE;
+}
 
-      .form-row {
+.consent-item input {
+    width: 17px;
+    height: 17px;
+    margin-top: 3px;
+    flex-shrink: 0;
+    accent-color: var(--secondary);
+    cursor: pointer;
+}
+
+.consent-item label {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+    margin: 0;
+    cursor: pointer;
+}
+
+.privacy-note {
+    background: #fdfaf0;
+    border-left: 3px solid var(--secondary);
+    padding: 15px;
+    font-size: 12px;
+    color: #53645B;
+    margin-top: 22px;
+    border-radius: 4px;
+}
+
+.submit-area {
+    text-align: center;
+    margin: 30px 0 50px;
+}
+
+.submit-btn {
+    background: var(--primary);
+    color: white;
+    border: 2px solid #ab875f;
+    padding: 17px 50px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    max-width: 400px;
+}
+
+.submit-btn:hover {
+    background: #ffffff;
+    color: #ab875f;
+    transform: translateY(-2px);
+}
+
+.submit-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 13px;
+}
+
+.footer {
+    background: var(--primary);
+    text-align: center;
+    padding: 50px;
+    color: #ffffff;
+    font-size: 12px;
+}
+
+.footer strong {
+    color: var(--accent);
+}
+
+@media(max-width: 600px) {
+    .form-grid {
         grid-template-columns: 1fr;
         gap: 0;
-      }
-
-      .section-title {
-        font-size: 19px;
-      }
     }
-  </style>
+
+    .form-section {
+        padding: 22px 18px;
+    }
+
+    .intro h1 {
+        font-size: 25px;
+    }
+
+    .header {
+        padding: 25px 15px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<div class="form-wrapper">
+<header class="header">
+    <a href="index.html" class="logo">
+        <img src="./img/Funding_Engine_Logo_-_Cropped-removebg-preview.png" alt="Funding Engine Logo" />
+      </a>
+</header>
 
-  <div class="form-container">
+<main class="container">
 
-      <p>
-        <strong>Funding Readiness</strong><br><br>
-        Tell us about your business and funding requirements. Your information
-        will help us assess your funding readiness and identify suitable
-        funding opportunities.
-      </p>
+    <div class="intro">
+        <h1>Funding Application</h1>
+        <p>
+            Complete the application below to help us understand
+            your business, assess your funding requirements and
+            identify suitable funding opportunities.
+        </p>
     </div>
 
-    <!-- FORM -->
-    <form action="https://formsubmit.co/fundingengine.sa@gmail.com"
-          method="POST"
-          enctype="multipart/form-data">
+    <div class="progress-wrapper">
+        <div class="progress-label">
+            <span>Application progress</span>
+            <span id="progressText">0% completed</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
 
-      <!-- FormSubmit Settings -->
-      <input type="hidden" name="_subject" value="New Funding Engine™ Application">
-      <input type="hidden" name="_captcha" value="true">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://fundingengine.co.za">
+    <form action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value="dc070c43-2fd9-4793-a704-50b73def13ea">
 
-      <!-- Honeypot spam protection -->
-      <input type="text" name="_honey" class="hidden-field" tabindex="-1" autocomplete="off">
+        <!-- FORMSUBMIT SETTINGS -->
+        <input type="hidden" name="_subject"
+        value="New Funding Application - Funding Engine">
 
-      <!-- 1. APPLICANT INFORMATION -->
-      <div class="section">
+        <input type="hidden" name="_template" value="table">
 
-        <h2 class="section-title">
-          <span class="section-number">01</span>
-          Applicant Information
-        </h2>
+        <input type="hidden" name="_captcha" value="true">
 
-        <div class="form-row">
+        <input type="hidden" name="_replyto" id="replyEmail">
 
-          <div class="form-group">
-            <label>Full Name <span class="required">*</span></label>
-            <input type="text" name="Full Name" required>
-          </div>
+        <!-- HONEYPOT SPAM PROTECTION -->
+        <input type="text" name="_honey"
+        style="display:none">
 
-          <div class="form-group">
-            <label>Email Address <span class="required">*</span></label>
-            <input type="email" name="Email Address" required>
-          </div>
+        <!-- SECTION 1 -->
+        <section class="form-section">
+
+            <div class="section-heading">
+                <div class="section-number">01</div>
+                <div>
+                    <h2>Applicant Information</h2>
+                    <p>Tell us about yourself.</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" name="Full Name"
+                     required>
+                </div>
+
+                <div class="form-group">
+                    <label>ID Number <span class="required">*</span></label>
+                    <input type="text" name="ID Number"
+                    inputmode="numeric"
+                    pattern="[0-9]{13}"
+                    minlength="13" maxlength="13" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" name="Email Address"
+                    id="emailAddress"required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="tel" name="Phone Number" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>Position in Business <span class="required">*</span></label>
+                    <select name="Position in Business" required>
+                        <option value="">Select your position</option>
+                        <option>Owner</option>
+                        <option>Founder</option>
+                        <option>Director</option>
+                        <option>Shareholder</option>
+                        <option>Partner</option>
+                        <option>Financial Manager</option>
+                    </select>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2 -->
+        <section class="form-section">
+
+            <div class="section-heading">
+                <div class="section-number">02</div>
+                <div>
+                    <h2>Business Information</h2>
+                    <p>Provide your business details.</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Business Name <span class="required">*</span></label>
+                    <input type="text" name="Business Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Registration Number <span class="required">*</span></label>
+                    <input type="text" name="Registration Number" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Industry / Sector <span class="required">*</span></label>
+                    <select name="Industry / Sector" required>
+                        <option value="">Select industry</option>
+                        <option>Agriculture and Farming</option>
+                        <option>Construction and Property</option>
+                        <option>Manufacturing</option>
+                        <option>Mining and Resources</option>
+                        <option>Retail and Wholesale</option>
+                        <option>Food and Beverage</option>
+                        <option>Hospitality and Tourism</option>
+                        <option>Transport and Logistics</option>
+                        <option>Technology and ICT</option>
+                        <option>Professional Services</option>
+                        <option>Financial Services</option>
+                        <option>Healthcare</option>
+                        <option>Education and Training</option>
+                        <option>Energy and Renewable Energy</option>
+                        <option>Creative Industries and Media</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Business Location <span class="required">*</span></label>
+                    <input type="text" name="Business Location"
+                    placeholder="City, Province" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>Business Stage <span class="required">*</span></label>
+                    <select name="Business Stage" required>
+                        <option value="">Select business stage</option>
+                        <option>Idea Stage</option>
+                        <option>Start-up (Less Than 1 Year)</option>
+                        <option>Early Stage (1 to 2 Years)</option>
+                        <option>Established (3+ years)</option>
+                    </select>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3 -->
+        <section class="form-section">
+
+            <div class="section-heading">
+                <div class="section-number">03</div>
+                <div>
+                    <h2>Business Performance</h2>
+                    <p>Help us understand your business revenue.</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Does the business currently generate revenue?
+                    <span class="required">*</span></label>
+                    <select name="Currently Generating Revenue" required>
+                        <option value="">Select an option</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Average Monthly Revenue
+                    <span class="required">*</span></label>
+                    <select name="Average Monthly Revenue" required>
+                        <option value="">Select revenue range</option>
+                        <option>R0 - No Revenue</option>
+                        <option>R1 - R10,000</option>
+                        <option>R10,001 - R50,000</option>
+                        <option>R50,001 - R100,000</option>
+                        <option>Above R100,000</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label>Sources of Revenue
+                    <span class="required">*</span></label>
+                    <textarea name="Sources of Revenue"
+                    placeholder="Describe how your business generates revenue."
+                    required></textarea>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 4 -->
+        <section class="form-section">
+
+            <div class="section-heading">
+                <div class="section-number">04</div>
+                <div>
+                    <h2>Financial Position</h2>
+                    <p>Tell us about your business's financial standing.</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Business bank statements you can provide?
+                    <span class="required">*</span></label>
+                    <select name="Available Bank Statements" required>
+                        <option value="">Select an option</option>
+                        <option>Less than 6 months</option>
+                        <option>6 months</option>
+                        <option>12 months</option>
+                        <option>More than 12 months</option>
+                        <option>Business does not have a bank account</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Does the business have existing debt?
+                    <span class="required">*</span></label>
+                    <select name="Existing Business Debt" required>
+                        <option value="">Select an option</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label>Are you currently up to date with your repayments?
+                    <span class="required">*</span></label>
+                    <select name="Repayment Status" required>
+                        <option value="">Select an option</option>
+                        <option>Yes </option>
+                        <option>No </option>
+                        <option>Not Applicable</option>
+                    </select>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 5 -->
+        <section class="form-section">
+
+            <div class="section-heading">
+                <div class="section-number">05</div>
+                <div>
+                    <h2>Funding Requirement</h2>
+                    <p>Tell us how much capital your business needs.</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>How Much Funding Are You Seeking?
+                    <span class="required">*</span></label>
+                    <input type="number" name="Funding Amount Requested"
+                    min="1" step="0.01" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>What Is the Primary Purpose of Funding?
+                    <span class="required">*</span></label>
+                    <select name="Primary Purpose of Funding" required>
+                        <option value="">Select funding purpose</option>
+                        <option>Business Start-up</option>
+                        <option>Working Capital</option>
+                        <option>Equipment and Machinery</option>
+                        <option>Asset Acquisition</option>
+                        <option>Business Expansion</option>
+                        <option>Infrastructure and Construction</option>
+                        <option>Stock and Inventory</option>
+                        <option>Product Development</option>
+                        <option>Contract / Tender Finance</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>What Type of Funding Are You Seeking?
+                    <span class="required">*</span></label>
+                    <select name="Preferred Funding Type" required>
+                        <option value="">Select funding type</option>
+                        <option>Business Loan</option>
+                        <option>Grant Funding</option>
+                        <option>Asset Finance</option>
+                        <option>Purchase Order / Contract Finance</option>
+                        <option>Merchant Cash Advance</option>
+                        <option>Not Sure</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Would You Consider Other Funding Types If Suitable?
+                    <span class="required">*</span></label>
+                    <select name="Open to Alternative Funding Types" required>
+                        <option value="">Select an option</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 6 -->
+        <section class="form-section">
+
+            <div class="section-heading">
+                <div class="section-number">06</div>
+                <div>
+                    <h2>Declaration and Consent</h2>
+                    <p>Please read and confirm the following declarations.</p>
+                </div>
+            </div>
+
+            <p class="declaration-intro">
+                By submitting this application, you acknowledge and agree
+                to the following:
+            </p>
+
+            <div class="consent-item">
+                <input type="checkbox" id="accurate"
+                name="Declaration - Information Accuracy"
+                value="Agreed" required>
+                <label for="accurate">
+                    I confirm that all information provided in this
+                    application is accurate and complete to
+                    the best of my knowledge.
+                    <span class="required">*</span>
+                </label>
+            </div>
+
+            <div class="consent-item">
+                <input type="checkbox" id="contact"
+                name="Consent - Contact"
+                value="Agreed" required>
+                <label for="contact">
+                    I consent to Funding Engine contacting me regarding this
+                    application and related services.
+                    <span class="required">*</span>
+                </label>
+            </div>
+
+            <div class="consent-item">
+                <input type="checkbox" id="sharing"
+                name="Consent - Information Sharing"
+                value="Agreed" required>
+                <label for="sharing">
+                    I consent to Funding Engine sharing relevant
+                    business and personal information with selected
+                    funding institutions, lenders and
+                    funding partners for the purpose of assessing
+                    and processing my funding application.
+                    <span class="required">*</span>
+                </label>
+            </div>
+
+            <div class="consent-item">
+                <input type="checkbox" id="fees"
+                name="Acknowledgement - Funding Readiness Fees"
+                value="Agreed" required>
+                <label for="fees">
+                    I understand that Funding Engine may charge for application support where applicable. 
+                    <span class="required">*</span>
+                </label>
+            </div>
+
+             <div class="consent-item">
+                <input type="checkbox" id="approval"
+                name="Acknowledgement - Funding Approval"
+                value="Agreed" required>
+                <label for="approval">
+                    I understand that completing this application
+                    does not guarantee funding approval. 
+                    <span class="required">*</span>
+                </label>
+            </div>
+
+            <div class="privacy-note">
+                <strong>Privacy and Information Protection</strong><br>
+                Funding Engine will process the information provided
+                for purposes related to your funding application,
+                assessment and relevant services, in accordance with
+                applicable data protection legislation, including
+                POPIA. Information will only be shared with relevant
+                third parties for the purposes described above and
+                subject to applicable legal requirements.
+            </div>
+
+        </section>
+
+        <!-- SUBMIT -->
+        <div class="submit-area">
+
+            <button type="submit" class="submit-btn">
+                Submit Funding Application 
+            </button>
+
+            <p class="submit-note">
+                Please ensure that all required fields and declarations
+                have been completed before submitting.
+            </p>
 
         </div>
-
-        <div class="form-row">
-
-          <div class="form-group">
-            <label>Phone Number <span class="required">*</span></label>
-            <input type="tel" name="Phone Number" required>
-          </div>
-
-          <div class="form-group">
-            <label>Position in Business <span class="required">*</span></label>
-            <select name="Position in Business" required>
-              <option value="">Select an option</option>
-              <option>Owner / Founder</option>
-              <option>Director</option>
-              <option>Partner</option>
-              <option>CEO / Executive</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-        </div>
-
-        <div class="form-group">
-          <label>Preferred Contact Method</label>
-          <select name="Preferred Contact Method">
-            <option value="">Select an option</option>
-            <option>Phone</option>
-            <option>WhatsApp</option>
-            <option>Email</option>
-          </select>
-        </div>
-
-      </div>
-
-
-      <!-- 2. BUSINESS INFORMATION -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">02</span>
-          Business Information
-        </h2>
-
-        <div class="form-row">
-
-          <div class="form-group">
-            <label>Business Name <span class="required">*</span></label>
-            <input type="text" name="Business Name" required>
-          </div>
-
-          <div class="form-group">
-            <label>Registration Number</label>
-            <input type="text" name="Registration Number">
-          </div>
-
-        </div>
-
-        <div class="form-group">
-          <label>Business Website / Social Media</label>
-          <input type="url" name="Business Website or Social Media">
-        </div>
-
-        <div class="form-row">
-
-          <div class="form-group">
-            <label>Industry / Sector <span class="required">*</span></label>
-            <input type="text" name="Industry / Sector" required>
-          </div>
-
-          <div class="form-group">
-            <label>Business Location <span class="required">*</span></label>
-            <input type="text" name="Business Location" placeholder="City / Province" required>
-          </div>
-
-        </div>
-
-        <div class="form-row">
-
-          <div class="form-group">
-            <label>Year Business Started <span class="required">*</span></label>
-            <input type="number"
-                   name="Year Business Started"
-                   min="1900"
-                   max="2026"
-                   required>
-          </div>
-
-          <div class="form-group">
-            <label>Business Stage <span class="required">*</span></label>
-            <select name="Business Stage" required>
-              <option value="">Select an option</option>
-              <option>Idea / Pre-startup</option>
-              <option>Startup / Pre-revenue</option>
-              <option>Early-stage / Trading</option>
-              <option>Established</option>
-              <option>High-growth / Expansion</option>
-            </select>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- 3. OWNERSHIP -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">03</span>
-          Ownership & Management
-        </h2>
-
-        <div class="form-group">
-          <label>Ownership Breakdown <span class="required">*</span></label>
-          <textarea
-            name="Ownership Breakdown"
-            placeholder="Please indicate the percentage ownership of each shareholder/director."
-            required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>
-            Industry Experience of Owner / Management Team
-            <span class="required">*</span>
-          </label>
-
-          <select name="Management Industry Experience" required>
-            <option value="">Select an option</option>
-            <option>Less than 1 year</option>
-            <option>1–3 years</option>
-            <option>3–5 years</option>
-            <option>5–10 years</option>
-            <option>10+ years</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Management Team Experience & Qualifications <span class="required">*</span></label>
-          <textarea name="Management Experience and Qualifications" required></textarea>
-        </div>
-
-      </div>
-
-
-      <!-- 4. BUSINESS PERFORMANCE -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">04</span>
-          Business Performance
-        </h2>
-
-        <div class="form-group">
-          <label>Does the business currently generate revenue? <span class="required">*</span></label>
-
-          <select name="Revenue Status" required>
-            <option value="">Select an option</option>
-            <option>No</option>
-            <option>Yes, but irregularly</option>
-            <option>Yes, consistently</option>
-            <option>Yes, and growing</option>
-          </select>
-        </div>
-
-        <div class="form-row">
-
-          <div class="form-group">
-            <label>Average Monthly Revenue <span class="required">*</span></label>
-
-            <select name="Average Monthly Revenue" required>
-              <option value="">Select an option</option>
-              <option>R0</option>
-              <option>R1–R50,000</option>
-              <option>R50,001–R250,000</option>
-              <option>R250,001–R1 million</option>
-              <option>R1 million+</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Approximate Annual Turnover <span class="required">*</span></label>
-
-            <select name="Annual Turnover" required>
-              <option value="">Select an option</option>
-              <option>Pre-revenue</option>
-              <option>Under R500,000</option>
-              <option>R500,000–R1 million</option>
-              <option>R1–R5 million</option>
-              <option>R5–R10 million</option>
-              <option>R10 million+</option>
-            </select>
-          </div>
-
-        </div>
-
-        <div class="form-group">
-          <label>Is the business currently profitable? <span class="required">*</span></label>
-
-          <select name="Profitability" required>
-            <option value="">Select an option</option>
-            <option>No, operating at a loss</option>
-            <option>Break-even</option>
-            <option>Occasionally profitable</option>
-            <option>Consistently profitable</option>
-            <option>Highly profitable</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Main Sources of Revenue <span class="required">*</span></label>
-          <textarea name="Main Sources of Revenue" required></textarea>
-        </div>
-
-
-      </div>
-
-
-      <!-- 5. FINANCIAL POSITION -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">05</span>
-          Financial Position
-        </h2>
-
-        <div class="form-group">
-          <label>Do you maintain financial records? <span class="required">*</span></label>
-
-          <select name="Financial Records" required>
-            <option value="">Select an option</option>
-            <option>No</option>
-            <option>Basic bookkeeping</option>
-            <option>Monthly management accounts</option>
-            <option>Full financial statements</option>
-            <option>Audited / independently reviewed statements</option>
-          </select>
-        </div>
-
-
-        <div class="form-group">
-          <label>How many months of business bank statements can you provide?</label>
-
-          <select name="Bank Statements">
-            <option value="">Select an option</option>
-            <option>None</option>
-            <option>Less than 3 months</option>
-            <option>3–6 months</option>
-            <option>6–12 months</option>
-            <option>12+ months</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Does the business have existing debt?</label>
-
-          <select name="Existing Business Debt">
-            <option value="">Select an option</option>
-            <option>No</option>
-            <option>Yes — under R100,000</option>
-            <option>Yes — R100,000–R500,000</option>
-            <option>Yes — R500,000–R2 million</option>
-            <option>Yes — above R2 million</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Are you currently up to date with your debt repayments?</label>
-
-          <select name="Debt Repayment Status">
-            <option value="">Select an option</option>
-            <option>Yes</option>
-            <option>No</option>
-            <option>Some payments are overdue</option>
-            <option>Not applicable</option>
-          </select>
-        </div>
-
-      </div>
-
-
-
-      <!-- 7. FUNDING REQUIREMENT -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">06</span>
-          Funding Requirement
-        </h2>
-
-        <div class="form-group">
-          <label>How much funding are you seeking? <span class="required">*</span></label>
-
-          <input
-            type="number"
-            name="Funding Amount"
-            placeholder="Enter amount in Rand"
-            min="0"
-            required>
-        </div>
-
-        <div class="form-group">
-          <label>Primary Purpose of Funding <span class="required">*</span></label>
-
-          <select name="Funding Purpose" required>
-            <option value="">Select an option</option>
-            <option>Working capital</option>
-            <option>Equipment / machinery</option>
-            <option>Property</option>
-            <option>Expansion</option>
-            <option>Inventory</option>
-            <option>Marketing</option>
-            <option>Technology</option>
-            <option>Acquisition</option>
-            <option>Franchise</option>
-            <option>Business acquisition</option>
-            <option>Startup costs</option>
-            <option>Debt restructuring</option>
-            <option>Other</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Explain exactly how the funding will be used. <span class="required">*</span></label>
-          <textarea name="Funding Use" required></textarea>
-        </div>
-
-
-      </div>
-
-
-      <!-- 8. FUNDING PREFERENCE -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">07</span>
-          Funding Preference
-        </h2>
-
-        <div class="form-group">
-          <label>What type of funding are you seeking? <span class="required">*</span></label>
-
-          <select name="Preferred Funding Type" required>
-            <option value="">Select an option</option>
-            <option>Grant / Incentive</option>
-            <option>Business Loan</option>
-            <option>Equity Investment</option>
-            <option>Alternative Finance</option>
-            <option>Not sure — recommend the best option</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Would you consider other funding types if they are more suitable?</label>
-
-          <div class="radio-group">
-
-            <label class="radio-option">
-              <input type="radio" name="Consider Other Funding" value="Yes">
-              Yes
-            </label>
-
-            <label class="radio-option">
-              <input type="radio" name="Consider Other Funding" value="No">
-              No
-            </label>
-
-          </div>
-        </div>
-
-
-      </div>
-
-
-      <!-- 9. BUSINESS GROWTH -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">08</span>
-          Business Plan & Growth
-        </h2>
-
-
-        <div class="form-group">
-          <label>Primary Growth Objectives for the Next 12–36 Months</label>
-          <textarea name="Growth Objectives"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>What measurable results do you expect from the funding?</label>
-          <textarea
-            name="Expected Results"
-            placeholder="Examples: revenue growth, jobs created, new locations, production capacity, customer growth, etc."></textarea>
-        </div>
-
-      </div>
-
-
-
-      <!-- 11. BUSINESS OPPORTUNITY -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">09</span>
-          Business Opportunity
-        </h2>
-
-        <div class="form-group">
-          <label>Who are your target customers?</label>
-          <textarea name="Target Customers"></textarea>
-        </div>
-
-
-        <div class="form-group">
-          <label>What competitive advantage does your business have?</label>
-          <textarea name="Competitive Advantage"></textarea>
-        </div>
-
-      </div>
-
-
-      <!-- 12. FUNDING READINESS -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number">10</span>
-          Funding Readiness
-        </h2>
-
-
-        <div class="form-group">
-          <label>What type of support are you looking for?</label>
-
-          <div class="checkbox-group">
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Fundability Audit">
-              Fundability Audit
-            </label>
-
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Grant Readiness">
-              Grant Readiness
-            </label>
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Loan Readiness">
-              Loan Readiness
-            </label>
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Investment Readiness">
-              Investment Readiness
-            </label>
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Funding Application Preparation">
-              Funding Application Support
-            </label>
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Funding Opportunity Matching">
-              Funding Opportunity Matching
-            </label>
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Capital Access">
-              Capital Access
-            </label>
-
-            <label class="checkbox-option">
-              <input type="checkbox" name="Support Required[]" value="Not sure">
-              Not sure
-            </label>
-
-          </div>
-        </div>
-
-      </div>
-
-
-      <!-- 13. DECLARATION -->
-      <div class="section">
-
-        <h2 class="section-title">
-          <span class="section-number"></span>
-          Declaration & Consent
-        </h2>
-
-        <div class="declaration">
-
-          <label class="checkbox-option">
-            <input
-              type="checkbox"
-              name="Declaration"
-              value="Applicant confirms information is accurate and complete"
-              required>
-
-            <span>
-              I confirm that the information provided in this application is
-              accurate and complete to the best of my knowledge. I understand
-              that providing false or misleading information may affect my
-              eligibility for funding and/or Funding Engine's ability to assist me.
-            </span>
-
-          </label>
-
-        </div>
-
-        <div class="declaration">
-
-          <label class="checkbox-option">
-            <input
-              type="checkbox"
-              name="Contact Consent"
-              value="Applicant consents to contact"
-              required>
-
-            <span>
-              I consent to Funding Engine contacting me regarding my funding readiness, suitable funding opportunities,
-              and related services.
-            </span>
-
-          </label>
-
-        </div>
-
-        <div class="declaration">
-
-          <label class="checkbox-option">
-            <input
-              type="checkbox"
-              name="Funding Acknowledgement"
-              value="Applicant acknowledges funding is not guaranteed"
-              required>
-
-            <span>
-              I understand that completing this form does not guarantee
-              funding approval. Funding decisions are ultimately made by the
-              relevant lender, investor, grant provider, or funding institution.
-            </span>
-
-          </label>
-
-        </div>
-
-      </div>
-
-
-      <!-- SUBMIT -->
-      <button type="submit" class="submit-btn">
-        Submit Fundability Request →
-      </button>
-
 
     </form>
 
-  </div>
+</main>
 
-</div>
+<footer class="footer">
+    © 2026 Funding Engine. All rights reserved.
+</footer>
+
+<script>
+
+// Progress indicator
+const form = document.getElementById("fundingForm");
+const progressFill = document.getElementById("progressFill");
+const progressText = document.getElementById("progressText");
+
+function updateProgress() {
+    const fields = Array.from(
+        form.querySelectorAll(
+            "input:not([type=hidden]):not([type=checkbox]):not([name=_honey]), select, textarea"
+        )
+    );
+
+    const checkboxes = Array.from(
+        form.querySelectorAll(
+            'input[type="checkbox"]'
+        )
+    );
+
+    const total = fields.length + checkboxes.length;
+
+    const completedFields = fields.filter(field => {
+        return field.value.trim() !== "";
+    }).length;
+
+    const completedCheckboxes = checkboxes.filter(box => {
+        return box.checked;
+    }).length;
+
+    const percentage = Math.round(
+        ((completedFields + completedCheckboxes) / total) * 100
+    );
+
+    progressFill.style.width = percentage + "%";
+    progressText.textContent = percentage + "% completed";
+}
+
+form.addEventListener("input", updateProgress);
+form.addEventListener("change", updateProgress);
+
+// Automatically use applicant email as reply-to
+document.getElementById("emailAddress")
+.addEventListener("input", function() {
+    document.getElementById("replyEmail").value = this.value;
+});
+
+// Final validation
+form.addEventListener("submit", function(event) {
+
+    if (!form.checkValidity()) {
+        event.preventDefault();
+        form.reportValidity();
+        return;
+    }
+
+});
+
+</script>
 
 </body>
 </html>
